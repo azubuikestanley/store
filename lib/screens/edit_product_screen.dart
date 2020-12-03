@@ -66,7 +66,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     _priceFocusNode.dispose();
     _descriptionFocusNode.dispose();
     _imageUrlController.dispose();
-    _imageUrlController.dispose();
+    _imageUrlFocusNode.dispose();
     super.dispose();
   }
 
@@ -103,15 +103,30 @@ class _EditProductScreenState extends State<EditProductScreen> {
     } else {
       Provider.of<Products>(context, listen: false)
           .addProduct(_editedProduct)
-          .then((_) {
+          .catchError((error) {
+        return showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text('An error occurred!'),
+            content: Text('Something went worng!'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Okay'),
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
+              )
+            ],
+          ),
+        );
+      }).then((_) {
         setState(() {
           _isLoading = false;
         });
         Navigator.of(context).pop();
       });
     }
-    Navigator.of(context).pop();
-
+    // Navigator.of(context).pop();
     // print(_editedProduct.title);
     // print(_editedProduct.price);
     // print(_editedProduct.description);

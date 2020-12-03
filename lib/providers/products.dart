@@ -80,7 +80,7 @@ class Products with ChangeNotifier {
         'description': product.description,
         'imageUrl': product.imageUrl,
         'price': product.price,
-        'isFavourite': product.isFavourite
+        'isFavourite': product.isFavourite,
       }),
     )
         .then((response) {
@@ -95,6 +95,9 @@ class Products with ChangeNotifier {
       _items.add(newProduct);
       // _items.insert(0, newProduct); //another way of saving //at the start of the list
       notifyListeners();
+    }).catchError((error) {
+      print(error);
+      throw error;
     });
   }
 
