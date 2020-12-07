@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
+// import 'package:flutter_test/flutter_test.dart';
 
 import './screens/cart_screen.dart';
 import './screens/products_overview_screen.dart';
@@ -13,7 +15,11 @@ import './screens/user_products_screen.dart';
 import './screens/edit_product_screen.dart';
 import './screens/auth-screen.dart';
 
-void main() => runApp(MyApp());
+Future main() async {
+  // TestWidgetsFlutterBinding.ensureInitialized();
+  await DotEnv().load('assets/.env');
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
