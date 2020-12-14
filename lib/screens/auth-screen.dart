@@ -145,6 +145,7 @@ class _AuthCardState extends State<AuthCard> {
           _authData['password'],
         );
       }
+      //Navigator.of(context).pushReplacementNamed('/products-overview'); //would work but will require a user to login whenever app is opened
     } on HttpException catch (error) {
       var errorMessage = 'Authentication Failed';
       if (error.toString().contains('EMAIL_EXISTS')) {
@@ -157,10 +158,13 @@ class _AuthCardState extends State<AuthCard> {
         errorMessage = 'Could not find a user with that email';
       } else if (error.toString().contains('INVALID_PASSWORD')) {
         errorMessage = 'Invalid password';
+      } else if (error.toString().contains('USER_DISABLED')) {
+        errorMessage = 'The user account has been disabled by an administrator';
       }
       _showErrorDialog(errorMessage);
     } catch (error) {
-      const errorMessage = 'Could not authenticate you, Please try again later';
+      // const errorMessage = 'Could not authenticate you, Please try again later';
+      final errorMessage = error.toString();
       _showErrorDialog(errorMessage);
     }
 
