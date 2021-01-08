@@ -24,6 +24,10 @@ class Auth with ChangeNotifier {
     return null;
   }
 
+  String get userId {
+    return _userId;
+  }
+
   Future<void> _authenticate(
       String email, String password, String urlSegment) async {
     String acKey = DotEnv().env['KEY'];
@@ -33,7 +37,11 @@ class Auth with ChangeNotifier {
     try {
       final response = await http.post(
         url,
-        body: json.encode(
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode(
           {
             'email': email,
             'password': password,
@@ -41,8 +49,11 @@ class Auth with ChangeNotifier {
           },
         ),
       );
-      final responseData = json.decode(response.body);
+      // print(response.statusCode);
+      final responseData = await json.decode(response.body);
       // print(responseData);
+      // print(responseData['expiresIn']);
+      // print(responseData['localId']);
       if (responseData['error'] != null) {
         throw HttpException(responseData['error']['message']);
       }
@@ -51,7 +62,10 @@ class Auth with ChangeNotifier {
       _expiryDate = DateTime.now().add(
         Duration(
           seconds: int.parse(
-            responseData['expiresIn'],
+            // responseData['expiresIn'],
+            responseData['expiresIn'] != null
+                ? responseData['expiresIn']
+                : '3600',
           ),
         ),
       );
@@ -66,6 +80,7 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> login(String email, String password) async {
-    return _authenticate(email, password, 'signInWithPassword');
+    // return _authenticate(email, password, 'signInWithPassword');
+    return _authenticate(email, password, 'signUp');
   }
 }
