@@ -80,7 +80,7 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> login(String email, String password) async {
-    // return _authenticate(email, password, 'signInWithPassword');
-    return _authenticate(email, password, 'signUp');
+    return _authenticate(email, password, 'signInWithPassword');
+    // return _authenticate(email, password, 'signUp');
   }
 }

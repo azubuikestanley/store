@@ -46,9 +46,10 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  Future<void> fetchAndSetProducts() async {
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
+    final filterString = filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
     var url =
-        'https://flutter-office-store.firebaseio.com/products.json?auth=$authToken';
+        'https://flutter-office-store.firebaseio.com/products.json?auth=$authToken&$filterString';
     try {
       final response = await http.get(url, headers: {
         'Content-Type': 'application/json; charset=UTF-8',
@@ -80,7 +81,8 @@ class Products with ChangeNotifier {
           title: prodData['title'],
           description: prodData['description'],
           price: prodData['price'],
-          isFavourite: favouriteData == null ? false : favouriteData[prodId] ?? false,
+          isFavourite:
+              favouriteData == null ? false : favouriteData[prodId] ?? false,
           imageUrl: prodData['imageUrl'],
         ));
       });
@@ -102,6 +104,7 @@ class Products with ChangeNotifier {
           'description': product.description,
           'imageUrl': product.imageUrl,
           'price': product.price,
+          'creatorId': userId,
         }),
       );
       final newProduct = Product(
