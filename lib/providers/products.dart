@@ -60,7 +60,7 @@ class Products with ChangeNotifier {
 
       // print(response.statusCode);
       // print(json.decode(response.body));
-      var extractedData = json.decode(response.body) as Map<String, dynamic>;
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
       if (extractedData == null) {
         return;
       }
@@ -73,7 +73,7 @@ class Products with ChangeNotifier {
         'Authorization': 'Bearer $authToken',
       });
 
-      final favouriteData = jsonDecode(favouriteResponse.body);
+      final favouriteData = json.decode(favouriteResponse.body);
 
       final List<Product> loadedProducts = [];
       extractedData.forEach((prodId, prodData) {
