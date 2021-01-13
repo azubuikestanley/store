@@ -28,7 +28,7 @@ class Products with ChangeNotifier {
     return [..._items];
   }
 
-  List<Product> get favoriteItems {
+  List<Product> get favouriteItems {
     return _items.where((prodItem) => prodItem.isFavourite).toList();
   }
 
@@ -52,14 +52,9 @@ class Products with ChangeNotifier {
     var url =
         'https://flutter-office-store.firebaseio.com/products.json?auth=$authToken&$filterString';
     try {
-      final response = await http.get(url, headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $authToken',
-      });
+      final response = await http.get(url);
 
       // print(response.statusCode);
-      // print(json.decode(response.body));
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       if (extractedData == null) {
         return;
@@ -67,11 +62,7 @@ class Products with ChangeNotifier {
 
       url =
           'https://flutter-office-store.firebaseio.com/userFavourites/$userId.json?auth=$authToken';
-      final favouriteResponse = await http.get(url, headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $authToken',
-      });
+      final favouriteResponse = await http.get(url);
 
       final favouriteData = json.decode(favouriteResponse.body);
 
@@ -100,6 +91,11 @@ class Products with ChangeNotifier {
     try {
       final response = await http.post(
         url,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $authToken',
+        },
         body: json.encode({
           'title': product.title,
           'description': product.description,
@@ -119,7 +115,7 @@ class Products with ChangeNotifier {
       // _items.insert(0, newProduct); //another way of saving //at the start of the list
       notifyListeners();
     } catch (error) {
-      print(error);
+      // print(error);
       throw error;
     }
   }
@@ -130,6 +126,11 @@ class Products with ChangeNotifier {
       final url =
           'https://flutter-office-store.firebaseio.com/products/$id.json?auth=$authToken';
       await http.patch(url,
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $authToken',
+          },
           body: json.encode({
             'title': newProduct.title,
             'description': newProduct.description,
