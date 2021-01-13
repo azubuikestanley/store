@@ -44,11 +44,11 @@ class Auth with ChangeNotifier {
           'Content-Type': 'application/json; charset=UTF-8',
           'Accept': 'application/json',
         },
-        body: jsonEncode(
+        body: json.encode(
           {
             'email': email,
             'password': password,
-            'retureSecureToken': true,
+            'returnSecureToken': true,
           },
         ),
       );
@@ -129,7 +129,7 @@ class Auth with ChangeNotifier {
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     // prefs.remove('userData');  //this removes only the data we want to remove
-    prefs.clear();  //this removes every stored data
+    prefs.clear(); //this removes every stored data
   }
 
   void _autoLogout() {
